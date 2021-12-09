@@ -49,15 +49,51 @@ def bar_show(univ):
     #fig2.update_yaxes(showticklabels=False)
     return tr
 def map_show(univ):
-    geolocator = util.Nominatim(user_agent="http")           
-    location = geolocator.geocode(univ['loc'])   
-    d = {'lat':[location.latitude],'lon':[location.longitude]}
-    df = util.pd.DataFrame(data=d)
-    fig3 = util.px.scatter_mapbox(df, lat="lat", lon="lon", 
-                        color_discrete_sequence=["fuchsia"], zoom=3, height=600)
-    fig3.update_layout(mapbox_style="open-street-map")
-    fig3.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    return fig3
+    geolocator = util.Nominatim(user_agent="http")  
+    try:        
+        location = geolocator.geocode(univ['addr'])   
+        d = {'lat':[location.latitude],'lon':[location.longitude]}
+        df = util.pd.DataFrame(data=d)
+        fig3 = util.px.scatter_mapbox(df, lat="lat", lon="lon", 
+                            color_discrete_sequence=["fuchsia"], zoom=3, height=600)
+        fig3.update_layout(mapbox_style="open-street-map")
+        fig3.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+        return fig3
+    except:
+        try:
+            addr = univ['addr'][univ['addr'].find(',') + 1:]
+            location = geolocator.geocode(addr)   
+            d = {'lat':[location.latitude],'lon':[location.longitude]}
+            df = util.pd.DataFrame(data=d)
+            fig3 = util.px.scatter_mapbox(df, lat="lat", lon="lon", 
+                                color_discrete_sequence=["fuchsia"], zoom=3, height=600)
+            fig3.update_layout(mapbox_style="open-street-map")
+            fig3.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+            return fig3
+        except:
+            try:
+                addr = univ['addr'][univ['addr'].find(',',univ['addr'].find(',')  + 1) + 1:]
+                location = geolocator.geocode(addr)   
+                d = {'lat':[location.latitude],'lon':[location.longitude]}
+                df = util.pd.DataFrame(data=d)
+                fig3 = util.px.scatter_mapbox(df, lat="lat", lon="lon", 
+                                    color_discrete_sequence=["fuchsia"], zoom=3, height=600)
+                fig3.update_layout(mapbox_style="open-street-map")
+                fig3.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+                return fig3
+            except:
+                try:
+                    addr = univ['loc']
+                    location = geolocator.geocode(addr)   
+                    d = {'lat':[location.latitude],'lon':[location.longitude]}
+                    df = util.pd.DataFrame(data=d)
+                    fig3 = util.px.scatter_mapbox(df, lat="lat", lon="lon", 
+                                        color_discrete_sequence=["fuchsia"], zoom=3, height=600)
+                    fig3.update_layout(mapbox_style="open-street-map")
+                    fig3.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+                    return fig3
+                except:
+                    return -1
 def table_show1(univ):
     c1 = ['Name','Country','Region','Foundation Year','Description','Website']
     c2 = []
@@ -99,5 +135,8 @@ def show1(univ):
     with open('p_graph.html', 'w') as f:
         f.write(fig.to_html(full_html=False, include_plotlyjs='cdn'))
         f.write('<p>University Location</p>')
-        f.write(map_show(univ).to_html(full_html=False, include_plotlyjs='cdn'))
+        if map_show(univ) != -1:
+            f.write(map_show(univ).to_html(full_html=False, include_plotlyjs='cdn'))
+        else:
+            f.write('Sorry, no available data.')
     util.webbrowser.open_new_tab('p_graph.html')

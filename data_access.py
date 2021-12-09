@@ -1,5 +1,5 @@
 import util
-MAX_STALENESS = 604800
+
 def get_info(info,str):
     if info not in str:
         print (str)
@@ -31,6 +31,36 @@ def request_with_cache(url, univ,CACHE_DICT, header = {}, params = {}):
     finally:
         print('------------------------')
         return CACHE_DICT[univ]['content']
+def request_with_cache1(url, univ,CACHE_DICT, header = {}, params = {}):
+    try:
+        if univ in CACHE_DICT:
+            print('Data found in Cache!')
+            print('------------------------')
+            return CACHE_DICT[univ]['content']
+        else:
+            print('Data not found in cache')
+            CACHE_DICT[univ]['content'] # To raise appropriate exception
+    except:
+        print('Requesting Web page...')
+        chrome_options = util.Options()
+        chrome_options.add_argument('--headless')
+        driver = util.webdriver.Chrome(chrome_options=chrome_options)
+        driver.get(url)
+        driver.switch_to.default_content()
+        util.time.sleep(4)
+
+        page_text = driver.page_source
+
+        driver.close()
+        driver.quit()
+        print('Caching returned text...')
+        CACHE_DICT[univ] = {}
+        CACHE_DICT[univ]['content'] = page_text
+        CACHE_DICT[univ]['cache-timestamp'] = util.datetime.now().timestamp()
+        print('Caching Complete!')
+    finally:
+        print('------------------------')
+        return CACHE_DICT[univ]['content']
 def data_access():
     try:
         CACHE = open('CACHE.json', 'r')
@@ -40,18 +70,11 @@ def data_access():
         CACHE_DICT = {}
     universities = {}
     ROOT_URL = "https://roundranking.com/ranking/world-university-rankings.html#world-2021"
-    chrome_options = util.Options()
-    chrome_options.add_argument('--headless')
-    driver = util.webdriver.Chrome(chrome_options=chrome_options)
-    driver.get(ROOT_URL)
-    driver.switch_to.default_content()
-    util.time.sleep(4)
-    soup = util.BeautifulSoup(driver.page_source, 'html.parser')
-    driver.close()
-    driver.quit()
-    html = soup.find_all("td",class_ = "td2")
+    html = request_with_cache1(ROOT_URL, 'main',CACHE_DICT)
+    soup = util.BeautifulSoup(html, 'html.parser')
+    htmla = soup.find_all("td",class_ = "td2")
     num = 0
-    for i in html:
+    for i in htmla:
         if num < 300:
             universities[i.string] = {}
             num += 1
@@ -87,8 +110,7 @@ def data_access():
         universities[name]["count"] = count
         count += 1
 
-    with open("2.json","w+") as f:
+    with open("univ.json","w+") as f:
         util.js.dump(universities,f)
     with open('CACHE.json','w') as f:
         util.js.dump(CACHE_DICT,f)
-data_access()

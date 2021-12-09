@@ -4,7 +4,7 @@ import data_access
 import visualization
 
 def main():
-    with open("2.json","r+") as f:
+    with open("univ.json","r+") as f:
         dict = util.js.load(f)
     univ_tree = BST.BSTNode()
     for i in dict:
@@ -37,6 +37,7 @@ def main():
             visualization.table_show(univ)
         else:
             visualization.show1(univ)
+        print('The information has been shown in website.')
         print('Do you want to select another university?(yes/no)')
         ans = input()
         if ans == 'no':
