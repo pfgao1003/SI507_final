@@ -2,7 +2,7 @@
 
 SI 507 Final Project README
 
-Pengfei Gao (pfgao,42511748)
+Pengfei Gao
 
 
 # Project Description
