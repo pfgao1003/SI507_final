@@ -1,5 +1,5 @@
 import util
-
+import univ_tree
 def get_info(info,str):
     if info not in str:
         print (str)
@@ -109,8 +109,9 @@ def data_access():
         universities[name]["addr"] = get_info("addr",i)
         universities[name]["count"] = count
         count += 1
-
-    with open("univ.json","w+") as f:
-        util.js.dump(universities,f)
     with open('CACHE.json','w') as f:
         util.js.dump(CACHE_DICT,f)
+    univ_tree.saveBST(universities,"univ_tree.json")
+    print('Data access successfully!')
+if __name__ == '__main__':
+    data_access()

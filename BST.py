@@ -33,3 +33,11 @@ class BSTNode:
         if self.right == None:
             return -1
         return self.right.find(val)
+    def preorder_save(self, vals):
+        if self.val is not None:
+            vals.append([self.val,self.info])
+        if self.left is not None:
+            self.left.preorder_save(vals)
+        if self.right is not None:
+            self.right.preorder_save(vals)
+        return vals

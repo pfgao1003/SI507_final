@@ -2,13 +2,10 @@ import util
 import BST
 import data_access
 import visualization
+import read_tree
 
 def main():
-    with open("univ.json","r+") as f:
-        dict = util.js.load(f)
-    univ_tree = BST.BSTNode()
-    for i in dict:
-        univ_tree.insert(dict[i],dict[i]['count'] + 1)
+    univ_tree = read_tree.read_tree('univ_tree.json')
     print ('-------------------------Welcome--------------------------')
     print('This system can show information of top 300 universities.')
     while True:
@@ -33,6 +30,7 @@ def main():
         print('1. text')
         print('2. plot')
         option = input()
+        print("Please wait...")
         if option == '1':
             visualization.table_show(univ)
         else:
