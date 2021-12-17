@@ -4,7 +4,7 @@ SI 507 Final Project README
 
 Pengfei Gao
 
-
+(README is not the document I uploaded to canvas, that document contains all information the rubric required. )
 # Project Description
 This is a program that can show users top universities and information related to
 these universities(such as Student/Faculty ratio, Location, Teaching Ranking, and
@@ -26,6 +26,8 @@ bs4
 
 time
 
+selenium
+
 geopy
 
 pandas
@@ -33,6 +35,9 @@ pandas
 webbrowser
 
 datetime
+
+Other required document: 
+The chromedriver.exe in root directory is used during data accessing part. If you use other browser, please install the driver of other browser.
 
 # Instructions
 

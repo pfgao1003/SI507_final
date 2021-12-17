@@ -9,7 +9,7 @@ def main():
     print ('-------------------------Welcome--------------------------')
     print('This system can show information of top 300 universities.')
     while True:
-        print('Please enter the rank(or rank range) of universities you want to search.')
+        print('Please enter the rank(or rank range) of universities you want to search.(between 1 and 300)')
         print('(If you want to see the universities which ranking between 40 and 60, please enter: 41 60.')
         ans = input()
         nums = ans.split(' ')
